@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลอยกระทงออนไลน์ 🪷 | Loy Krathong Online</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      overflow: hidden;
+      background: #050510;
+      color: #fff;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* ========== SKY ========== */
+    .sky {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 52%;
+      background: linear-gradient(to bottom,
+        #05051a 0%,
+        #0c0c2e 25%,
+        #151545 55%,
+        #1a2a4a 80%,
+        #1e3a5a 100%);
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .moon {
+      position: absolute;
+      top: 7%; right: 11%;
+      width: 100px; height: 100px;
+      background: radial-gradient(circle at 32% 32%,
+        #fffef5 0%,
+        #fff5d0 25%,
+        #ffe8a0 55%,
+        #f0d070 100%);
+      border-radius: 50%;
+      box-shadow:
+        0 0 30px 12px rgba(255, 230, 150, 0.45),
+        0 0 70px 35px rgba(255, 200, 100, 0.22),
+        0 0 120px 60px rgba(255, 180, 80, 0.1);
+      z-index: 3;
+    }
+
+    .moon::before {
+      content: '';
+      position: absolute;
+      top: 18px; left: 22px;
+      width: 28px; height: 28px;
+      background: rgba(240, 220, 140, 0.25);
+      border-radius: 50%;
+    }
+
+    .moon::after {
+      content: '';
+      position: absolute;
+      top: 45px; left: 55px;
+      width: 14px; height: 14px;
+      background: rgba(230, 210, 130, 0.2);
+      border-radius: 50%;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--d) ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+
+    /* Fireflies */
+    .firefly {
+      position: absolute;
+      width: 4px; height: 4px;
+      background: #ffe8a0;
+      border-radius: 50%;
+      box-shadow: 0 0 8px 3px rgba(255, 220, 100, 0.6);
+      animation: firefly-fly var(--dur) ease-in-out infinite;
+      opacity: 0;
+      z-index: 4;
+    }
+
+    @keyframes firefly-fly {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.5); }
+      15%  { opacity: 0.9; }
+      50%  { opacity: 0.7; transform: translate(var(--tx), var(--ty)) scale(1); }
+      85%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translate(calc(var(--tx) * 1.3), calc(var(--ty) * 0.7)) scale(0.4); }
+    }
+
+    /* ========== SILHOUETTE ========== */
+    .silhouette {
+      position: absolute;
+      bottom: 47%;
+      left: 0; width: 100%; height: 90px;
+      z-index: 5;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .silhouette svg { width: 100%; height: 100%; }
+
+    /* ========== WATER ========== */
+    .water {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 53%;
+      background: linear-gradient(to bottom,
+        #0a2848 0%,
+        #061e38 25%,
+        #041528 55%,
+        #020e18 100%);
+      overflow: hidden;
+      z-index: 6;
+      cursor: pointer;
+    }
+
+    .water-surface {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        linear-gradient(to bottom, rgba(120, 190, 255, 0.12) 0%, transparent 25%),
+        repeating-linear-gradient(90deg,
+          transparent 0px,
+          transparent 60px,
+          rgba(255,255,255,0.025) 60px,
+          rgba(255,255,255,0.025) 62px);
+      animation: water-flow 25s linear infinite;
+    }
+
+    @keyframes water-flow {
+      from { background-position: 0 0; }
+      to   { background-position: 120px 0; }
+    }
+
+    .wave {
+      position: absolute;
+      width: 220%;
+      height: 50px;
+      border-radius: 45%;
+      border-top: 2px solid rgba(160, 220, 255, 0.18);
+      opacity: 0.5;
+    }
+    .wave1 { top: 4%;  left: -60%; animation: wave-move 9s  linear infinite; }
+    .wave2 { top: 14%; left: -60%; animation: wave-move 13s linear infinite reverse; opacity: 0.35; }
+    .wave3 { top: 26%; left: -60%; animation: wave-move 11s linear infinite; opacity: 0.4; }
+    .wave4 { top: 38%; left: -60%; animation: wave-move 15s linear infinite reverse; opacity: 0.25; }
+
+    @keyframes wave-move {
+      from { transform: translateX(0); }
+      to   { transform: translateX(45%); }
+    }
+
+    .water-glow {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 70px;
+      background: linear-gradient(to bottom, rgba(255, 210, 140, 0.07), transparent);
+      pointer-events: none;
+    }
+
+    /* Moon reflection */
+    .moon-reflection {
+      position: absolute;
+      top: 8%;
+      right: 12%;
+      width: 80px; height: 120px;
+      background: linear-gradient(to bottom,
+        rgba(255, 230, 150, 0.15) 0%,
+        rgba(255, 200, 100, 0.06) 40%,
+        transparent 100%);
+      border-radius: 40%;
+      filter: blur(4px);
+      pointer-events: none;
+      z-index: 7;
+    }
+
+    /* ========== UI PANEL ========== */
+    .ui-panel {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      background: rgba(8, 16, 32, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 200, 100, 0.22);
+      border-radius: 22px;
+      padding: 16px 22px 14px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+      width: min(440px, 94vw);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .ui-panel h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+      background: linear-gradient(90deg, #ffe8a0, #ffd070, #ffe8a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 12px;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      color: rgba(255, 210, 140, 0.75);
+      text-align: left;
+      margin: 8px 0 5px;
+      font-weight: 500;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 8px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,200,100,0.25);
+      border-radius: 10px;
+      padding: 9px 13px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      border-color: #ffd070;
+      background: rgba(255,255,255,0.11);
+    }
+
+    .input-group textarea {
+      resize: none;
+      height: 52px;
+    }
+
+    .input-group input::placeholder,
+    .input-group textarea::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* Style & Color selectors */
+    .selector-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .style-btn, .color-btn {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .style-btn:hover, .color-btn:hover {
+      transform: scale(1.08);
+      border-color: rgba(255,200,100,0.5);
+    }
+
+    .style-btn.active, .color-btn.active {
+      border-color: #ffd070;
+      box-shadow: 0 0 12px rgba(255, 200, 80, 0.4);
+      background: rgba(255,200,100,0.15);
+    }
+
+    .color-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btn-float {
+      background: linear-gradient(135deg, #e8a030, #ffc050, #e8a030);
+      border: none;
+      border-radius: 50px;
+      padding: 11px 26px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1a1000;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+      box-shadow: 0 4px 18px rgba(255,180,50,0.4);
+    }
+
+    .btn-float:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 26px rgba(255,180,50,0.55);
+    }
+
+    .btn-float:active { transform: scale(0.97); }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,200,100,0.3);
+      border-radius: 50px;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #ffd070;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,200,100,0.15);
+      border-color: #ffd070;
+    }
+
+    .btn-secondary.active {
+      background: rgba(255,200,100,0.2);
+      border-color: #ffd070;
+    }
+
+    .counter {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: rgba(255,220,150,0.75);
+    }
+
+    /* ========== KRATHONG ========== */
+    .krathong {
+      position: absolute;
+      width: 72px;
+      height: 56px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .krathong .base {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 58px; height: 16px;
+      background: linear-gradient(to bottom, #2a5520, #163510);
+      border-radius: 50% 50% 40% 40%;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+    }
+
+    .krathong .petals {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 66px; height: 32px;
+    }
+
+    .krathong .petal {
+      position: absolute;
+      width: 22px; height: 30px;
+      border-radius: 50% 50% 18% 18%;
+      transform-origin: bottom center;
+    }
+
+    .krathong .candle {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px; height: 15px;
+      background: linear-gradient(to top, #f0e0b0, #fffaf0);
+      border-radius: 2px;
+      z-index: 3;
+    }
+
+    .krathong .flame {
+      position: absolute;
+      bottom: 41px;
+      left: 50%;
+      width: 11px; height: 17px;
+      background: radial-gradient(ellipse at bottom, #ffaa00 0%, #ff5500 45%, transparent 72%);
+      border-radius: 50% 50% 18% 18%;
+      animation: flicker 0.13s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 7px #ff8800);
+      z-index: 4;
+      transform: translateX(-50%);
+    }
+
+    .krathong .flame::before {
+      content: '';
+      position: absolute;
+      bottom: 3px; left: 50%;
+      transform: translateX(-50%);
+      width: 5px; height: 8px;
+      background: radial-gradient(ellipse at bottom, #fff9c0, #ffcc00);
+      border-radius: 50%;
+    }
+
+    @keyframes flicker {
+      0%   { transform: translateX(-50%) scaleY(1) scaleX(1); }
+      100% { transform: translateX(-50%) scaleY(1.18) scaleX(0.88); }
+    }
+
+    .krathong .incense {
+      position: absolute;
+      bottom: 29px;
+      width: 2px; height: 17px;
+      background: #7a4a22;
+      border-radius: 1px;
+    }
+    .krathong .incense.i1 { left: 26px; transform: rotate(-11deg); }
+    .krathong .incense.i2 { left: 42px; transform: rotate(9deg); }
+
+    .krathong .smoke {
+      position: absolute;
+      bottom: 46px;
+      width: 5px; height: 14px;
+      background: linear-gradient(to top, rgba(220,220,220,0.35), transparent);
+      border-radius: 50%;
+      animation: smoke-rise 2.2s ease-out infinite;
+      opacity: 0.55;
+    }
+    .krathong .smoke.s1 { left: 24px; animation-delay: 0s; }
+    .krathong .smoke.s2 { left: 40px; animation-delay: 0.8s; }
+
+    @keyframes smoke-rise {
+      0%   { transform: translateY(0) scale(1); opacity: 0.5; }
+      100% { transform: translateY(-22px) scale(2); opacity: 0; }
+    }
+
+    .krathong .reflection {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%) scaleY(-0.55);
+      width: 48px; height: 18px;
+      background: radial-gradient(ellipse, rgba(255,150,40,0.28), transparent 70%);
+      border-radius: 50%;
+      filter: blur(3px);
+      opacity: 0.55;
+    }
+
+    /* Style: Lotus more open */
+    .krathong.style-lotus .petal:nth-child(1) { left: 22px; transform: rotate(0deg); height: 32px; }
+    .krathong.style-lotus .petal:nth-child(2) { left: 7px;  transform: rotate(-38deg); }
+    .krathong.style-lotus .petal:nth-child(3) { left: 37px; transform: rotate(38deg); }
+    .krathong.style-lotus .petal:nth-child(4) { left: -2px; transform: rotate(-65deg); height: 24px; }
+    .krathong.style-lotus .petal:nth-child(5) { left: 46px; transform: rotate(65deg); height: 24px; }
+
+    /* Style: Banana leaf (more layered) */
+    .krathong.style-banana .petal {
+      border-radius: 40% 40% 30% 30%;
+      height: 26px;
+    }
+    .krathong.style-banana .petal:nth-child(1) { left: 22px; transform: rotate(0deg); width: 24px; }
+    .krathong.style-banana .petal:nth-child(2) { left: 8px;  transform: rotate(-28deg); }
+    .krathong.style-banana .petal:nth-child(3) { left: 36px; transform: rotate(28deg); }
+    .krathong.style-banana .petal:nth-child(4) { left: 0px;  transform: rotate(-50deg); height: 22px; }
+    .krathong.style-banana .petal:nth-child(5) { left: 44px; transform: rotate(50deg); height: 22px; }
+
+    /* Style: Modern (sharper) */
+    .krathong.style-modern .petal {
+      border-radius: 30% 30% 10% 10%;
+      height: 28px;
+    }
+    .krathong.style-modern .base {
+      background: linear-gradient(to bottom, #1a3a5a, #0a1a30);
+    }
+
+    /* Wish popup */
+    .wish-popup {
+      position: absolute;
+      background: rgba(12, 22, 40, 0.92);
+      border: 1px solid rgba(255,200,100,0.4);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: 50;
+      max-width: 220px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    }
+    .wish-popup.show { opacity: 1; }
+    .wish-popup .name {
+      color: #ffd070;
+      font-weight: 600;
+      font-size: 0.72rem;
+      margin-bottom: 2px;
+    }
+
+    /* Sparkles on release */
+    .sparkle {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: #ffe8a0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 30;
+      animation: sparkle-out 0.8s ease-out forwards;
+    }
+
+    @keyframes sparkle-out {
+      0%   { opacity: 1; transform: scale(1) translate(0,0); }
+      100% { opacity: 0; transform: scale(0.2) translate(var(--sx), var(--sy)); }
+    }
+
+    /* Hint */
+    .hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(20, 40, 60, 0.92);
+      border: 1px solid rgba(255,200,100,0.35);
+      color: #ffd070;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      opacity: 0;
+      transition: all 0.35s;
+      z-index: 300;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Sound indicator */
+    .sound-indicator {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 210;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(10,20,40,0.7);
+      border: 1px solid rgba(255,200,100,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.15rem;
+      transition: all 0.2s;
+    }
+    .sound-indicator:hover {
+      background: rgba(255,200,100,0.15);
+    }
+
+    @media (max-width: 520px) {
+      .ui-panel { padding: 12px 14px; }
+      .ui-panel h1 { font-size: 1.25rem; }
+      .moon { width: 70px; height: 70px; }
+      .btn-float { padding: 10px 20px; font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky" id="sky">
+    <div class="moon"></div>
+  </div>
+
+  <div class="silhouette">
+    <svg viewBox="0 0 1200 130" preserveAspectRatio="none">
+      <path fill="#060e1c" d="M0,130 L0,95
+        L35,95 L48,45 L60,95
+        L95,95 L108,30 L122,95
+        L170,95 L185,55 L200,95
+        L250,95 L280,12 L295,48 L310,12 L345,95
+        L400,95 L415,50 L430,95
+        L490,95 L520,18 L550,95
+        L600,95 L615,60 L630,95
+        L690,95 L725,8 L750,42 L775,8 L810,95
+        L870,95 L885,48 L900,95
+        L960,95 L975,55 L990,95
+        L1040,95 L1055,35 L1070,95
+        L1120,95 L1135,52 L1150,95
+        L1200,95 L1200,130 Z"/>
+    </svg>
+  </div>
+
+  <div class="water" id="water">
+    <div class="water-surface"></div>
+    <div class="wave wave1"></div>
+    <div class="wave wave2"></div>
+    <div class="wave wave3"></div>
+    <div class="wave wave4"></div>
+    <div class="water-glow"></div>
+    <div class="moon-reflection"></div>
+  </div>
+
+  <div class="sound-indicator" id="soundBtn" title="เปิด/ปิดเสียง">🔊</div>
+
+  <div class="ui-panel">
+    <h1>🪷 ลอยกระทงออนไลน์</h1>
+    <p class="subtitle">ขอขมาพระแม่คงคา · อธิษฐานขอพร · รักษ์โลก</p>
+
+    <div class="input-group">
+      <input type="text" id="userName" placeholder="ชื่อของคุณ (ไม่บังคับ)" maxlength="28">
+      <textarea id="userWish" placeholder="คำอธิษฐานของคุณ..." maxlength="90"></textarea>
+    </div>
+
+    <div class="section-label">รูปแบบกระทง</div>
+    <div class="selector-row" id="styleSelector">
+      <div class="style-btn active" data-style="lotus" title="ดอกบัว">🪷</div>
+      <div class="style-btn" data-style="banana" title="ใบตอง">🍃</div>
+      <div class="style-btn" data-style="modern" title="สมัยใหม่">✨</div>
+    </div>
+
+    <div class="section-label">สีกระทง</div>
+    <div class="selector-row" id="colorSelector">
+      <div class="color-btn active" data-color="pink"   style="background: linear-gradient(135deg,#e06080,#ff90a8)" title="ชมพู"></div>
+      <div class="color-btn" data-color="orange" style="background: linear-gradient(135deg,#e07030,#ffb060)" title="ส้ม"></div>
+      <div class="color-btn" data-color="purple" style="background: linear-gradient(135deg,#c040a0,#e070c0)" title="ม่วง"></div>
+      <div class="color-btn" data-color="yellow" style="background: linear-gradient(135deg,#e0a020,#ffd050)" title="เหลือง"></div>
+      <div class="color-btn" data-color="green"  style="background: linear-gradient(135deg,#40a060,#70d090)" title="เขียว"></div>
+      <div class="color-btn" data-color="blue"   style="background: linear-gradient(135deg,#4080c0,#70b0f0)" title="ฟ้า"></div>
+      <div class="color-btn" data-color="white"  style="background: linear-gradient(135deg,#e8e0d0,#ffffff)" title="ขาว"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-float" id="floatBtn">🕯️ ปล่อยกระทง</button>
+    </div>
+    <div class="btn-row" style="margin-top:8px;">
+      <button class="btn-secondary" id="shareBtn">📤 แชร์ภาพ</button>
+      <button class="btn-secondary" id="downloadBtn">💾 บันทึกภาพ</button>
+    </div>
+
+    <div class="counter">กระทงที่ลอยแล้ว: <span id="count">0</span></div>
+  </div>
+
+  <div class="hint">คลิกที่น้ำเพื่อปล่อยกระทง · เลือกสีและรูปแบบได้ด้านบน</div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===================== CONFIG & STATE =====================
+    const COLORS = {
+      pink:   ['#e06080', '#ff90a8', '#d05070'],
+      orange: ['#e07030', '#ffb060', '#d06020'],
+      purple: ['#c040a0', '#e070c0', '#a03080'],
+      yellow: ['#e0a020', '#ffd050', '#c08010'],
+      green:  ['#40a060', '#70d090', '#308050'],
+      blue:   ['#4080c0', '#70b0f0', '#3060a0'],
+      white:  ['#d0c8b8', '#f5f0e8', '#b8b0a0']
+    };
+
+    let selectedStyle = 'lotus';
+    let selectedColor = 'pink';
+    let krathongCount = 0;
+    const activeKrathongs = [];
+    const MAX_KRATHONGS = 45;
+    let soundEnabled = true;
+    let audioCtx = null;
+    let ambientNodes = [];
+
+    // ===================== SOUND (Web Audio API) =====================
+    function initAudio() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playReleaseChime() {
+      if (!soundEnabled || !audioCtx) return;
+      const now = audioCtx.currentTime;
+
+      // Soft bell-like tones
+      [523.25, 659.25, 783.99].forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.08 * (1 - i * 0.2), now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2 + i * 0.15);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + i * 0.08);
+        osc.stop(now + 1.5 + i * 0.2);
+      });
+    }
+
+    function startAmbient() {
+      if (!soundEnabled || !audioCtx || ambientNodes.length) return;
+
+      // Soft water-like noise
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.4;
+      }
+
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = noiseBuffer;
+      noise.loop = true;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 600;
+      filter.Q.value = 0.7;
+
+      const gain = audioCtx.createGain();
+      gain.gain.value = 0.035;
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      noise.start();
+
+      ambientNodes = [noise, filter, gain];
+    }
+
+    function stopAmbient() {
+      ambientNodes.forEach(n => {
+        try { if (n.stop) n.stop(); } catch(e) {}
+        try { n.disconnect(); } catch(e) {}
+      });
+      ambientNodes = [];
+    }
+
+    function toggleSound() {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('soundBtn');
+      btn.textContent = soundEnabled ? '🔊' : '🔇';
+      btn.classList.toggle('active', soundEnabled);
+
+      if (soundEnabled) {
+        startAmbient();
+        showToast('เปิดเสียงแล้ว');
+      } else {
+        stopAmbient();
+        showToast('ปิดเสียงแล้ว');
+      }
+    }
+
+    // ===================== STARS & FIREFLIES =====================
+    function createStars() {
+      const sky = document.getElementById('sky');
+      for (let i = 0; i < 90; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random() * 2.2 + 0.4;
+        s.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${Math.random()*100}%; top:${Math.random()*88}%;
+          --d:${(Math.random()*3.5+1.8).toFixed(1)}s;
+          animation-delay:${(Math.random()*4).toFixed(1)}s;
+        `;
+        sky.appendChild(s);
+      }
+    }
+
+    function createFireflies() {
+      const sky = document.getElementById('sky');
+      for (let i = 0; i < 12; i++) {
+        const f = document.createElement('div');
+        f.className = 'firefly';
+        const tx = (Math.random() * 120 - 40).toFixed(0);
+        const ty = (Math.random() * -80 - 20).toFixed(0);
+        f.style.cssText = `
+          left:${Math.random()*90+5}%;
+          top:${Math.random()*60+20}%;
+          --tx:${tx}px; --ty:${ty}px;
+          --dur:${(Math.random()*6+5).toFixed(1)}s;
+          animation-delay:${(Math.random()*8).toFixed(1)}s;
+        `;
+        sky.appendChild(f);
+      }
+    }
+
+    // ===================== KRATHONG CREATION =====================
+    function createKrathongEl(style, colorKey) {
+      const colors = COLORS[colorKey] || COLORS.pink;
+      const k = document.createElement('div');
+      k.className = `krathong style-${style} floating`;
+
+      const scale = 0.82 + Math.random() * 0.28;
+      k.dataset.scale = scale;
+
+      k.innerHTML = `
+        <div class="base"></div>
+        <div class="petals">
+          <div class="petal" style="background:linear-gradient(to top,${colors[2]},${colors[1]})"></div>
+          <div class="petal" style="background:linear-gradient(to top,${colors[0]},${colors[1]})"></div>
+          <div class="petal" style="background:linear-gradient(to top,${colors[0]},${colors[1]})"></div>
+          <div class="petal" style="background:linear-gradient(to top,${colors[2]},${colors[0]})"></div>
+          <div class="petal" style="background:linear-gradient(to top,${colors[2]},${colors[0]})"></div>
+        </div>
+        <div class="candle"></div>
+        <div class="flame"></div>
+        <div class="incense i1"></div>
+        <div class="incense i2"></div>
+        <div class="smoke s1"></div>
+        <div class="smoke s2"></div>
+        <div class="reflection"></div>
+      `;
+      return k;
+    }
+
+    function spawnSparkles(x, y) {
+      for (let i = 0; i < 10; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 20 + Math.random() * 50;
+        s.style.cssText = `
+          left:${x}px; top:${y}px;
+          --sx:${Math.cos(angle)*dist}px;
+          --sy:${Math.sin(angle)*dist - 20}px;
+          background:${['#ffe8a0','#ffd070','#fff','#ffaa50'][Math.floor(Math.random()*4)]};
+        `;
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 850);
+      }
+    }
+
+    function spawnKrathong(x, y, name = '', wish = '', isUser = false) {
+      if (activeKrathongs.length >= MAX_KRATHONGS) {
+        const old = activeKrathongs.shift();
+        old.el.remove();
+        if (old.popup) old.popup.remove();
+      }
+
+      const style = isUser ? selectedStyle : ['lotus','banana','modern'][Math.floor(Math.random()*3)];
+      const color = isUser ? selectedColor : Object.keys(COLORS)[Math.floor(Math.random()*Object.keys(COLORS).length)];
+
+      const el = createKrathongEl(style, color);
+      const startX = x ?? Math.random() * (window.innerWidth - 80);
+      const startY = y ?? (window.innerHeight * 0.52 + 25 + Math.random() * 50);
+
+      el.style.left = startX + 'px';
+      el.style.top  = startY + 'px';
+      el.style.transform = `scale(${el.dataset.scale})`;
+
+      document.body.appendChild(el);
+
+      let popup = null;
+      if (name || wish) {
+        popup = document.createElement('div');
+        popup.className = 'wish-popup';
+        popup.innerHTML = `
+          ${name ? `<div class="name">${esc(name)}</div>` : ''}
+          ${wish ? `<div>${esc(wish)}</div>` : ''}
+        `;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.classList.add('show'), 80);
+        setTimeout(() => {
+          popup.classList.remove('show');
+          setTimeout(() => popup.remove(), 400);
+        }, 4200);
+      }
+
+      if (isUser) {
+        el.style.filter = 'drop-shadow(0 0 14px rgba(255,200,80,0.75))';
+        setTimeout(() => el.style.filter = '', 2800);
+        spawnSparkles(startX + 36, startY + 10);
+        playReleaseChime();
+      }
+
+      activeKrathongs.push({
+        el, popup,
+        x: startX, y: startY,
+        speedX: (Math.random() * 0.35 + 0.12) * (Math.random() > 0.45 ? 1 : -0.25),
+        speedY: Math.random() * 0.12 + 0.04,
+        bob: Math.random() * Math.PI * 2,
+        life: 0,
+        scale: parseFloat(el.dataset.scale)
+      });
+
+      krathongCount++;
+      document.getElementById('count').textContent = krathongCount;
+    }
+
+    function esc(t) {
+      const d = document.createElement('div');
+      d.textContent = t;
+      return d.innerHTML;
+    }
+
+    // ===================== ANIMATION LOOP =====================
+    function animate(t) {
+      const now = t / 1000;
+      const waterTop = window.innerHeight * 0.48;
+
+      for (let i = activeKrathongs.length - 1; i >= 0; i--) {
+        const k = activeKrathongs[i];
+        k.life += 0.016;
+
+        k.x += k.speedX;
+        k.y += k.speedY * 0.25 + Math.sin(now * 1.4 + k.bob) * 0.18;
+        k.speedX += (Math.random() - 0.5) * 0.008;
+        k.speedX = Math.max(-0.45, Math.min(0.75, k.speedX));
+
+        if (k.y < waterTop + 8) k.y = waterTop + 8;
+        if (k.y > window.innerHeight - 55) k.y = window.innerHeight - 55;
+
+        k.el.style.left = k.x + 'px';
+        k.el.style.top  = k.y + 'px';
+        k.el.style.transform = `scale(${k.scale}) rotate(${Math.sin(now + k.bob) * 2.5}deg)`;
+
+        if (k.popup && k.popup.parentNode) {
+          k.popup.style.left = (k.x + 30) + 'px';
+          k.popup.style.top  = (k.y - 48) + 'px';
+        }
+
+        if (k.x < -120 || k.x > window.innerWidth + 60 || k.life > 100) {
+          k.el.remove();
+          if (k.popup) k.popup.remove();
+          activeKrathongs.splice(i, 1);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    // ===================== SHARE / DOWNLOAD =====================
+    function captureScene() {
+      return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        const w = Math.min(window.innerWidth, 1200);
+        const h = Math.min(window.innerHeight, 800);
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        // Sky gradient
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.5);
+        skyGrad.addColorStop(0, '#05051a');
+        skyGrad.addColorStop(0.4, '#151545');
+        skyGrad.addColorStop(1, '#1e3a5a');
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, w, h * 0.5);
+
+        // Moon
+        const mx = w * 0.85, my = h * 0.12, mr = 45;
+        const moonGrad = ctx.createRadialGradient(mx - 10, my - 10, 5, mx, my, mr);
+        moonGrad.addColorStop(0, '#fffef5');
+        moonGrad.addColorStop(0.5, '#ffe8a0');
+        moonGrad.addColorStop(1, '#f0d070');
+        ctx.beginPath();
+        ctx.arc(mx, my, mr, 0, Math.PI * 2);
+        ctx.fillStyle = moonGrad;
+        ctx.shadowColor = 'rgba(255,220,120,0.5)';
+        ctx.shadowBlur = 30;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Stars
+        ctx.fillStyle = '#fff';
+        for (let i = 0; i < 60; i++) {
+          ctx.globalAlpha = 0.3 + Math.random() * 0.7;
+          ctx.beginPath();
+          ctx.arc(Math.random() * w, Math.random() * h * 0.45, Math.random() * 1.5 + 0.3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // Water
+        const waterGrad = ctx.createLinearGradient(0, h * 0.48, 0, h);
+        waterGrad.addColorStop(0, '#0a2848');
+        waterGrad.addColorStop(0.5, '#041528');
+        waterGrad.addColorStop(1, '#020e18');
+        ctx.fillStyle = waterGrad;
+        ctx.fillRect(0, h * 0.48, w, h * 0.52);
+
+        // Simple krathongs representation
+        activeKrathongs.slice(-15).forEach(k => {
+          const kx = (k.x / window.innerWidth) * w;
+          const ky = (k.y / window.innerHeight) * h;
+          if (ky < h * 0.45) return;
+
+          // Base
+          ctx.fillStyle = '#1a3a12';
+          ctx.beginPath();
+          ctx.ellipse(kx + 30, ky + 40, 26, 8, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Petals (simplified)
+          const col = COLORS[selectedColor] || COLORS.pink;
+          ctx.fillStyle = col[0];
+          for (let p = -2; p <= 2; p++) {
+            ctx.beginPath();
+            ctx.ellipse(kx + 30 + p * 10, ky + 22, 10, 16, p * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Flame
+          ctx.fillStyle = '#ff8800';
+          ctx.shadowColor = '#ff6600';
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.ellipse(kx + 30, ky + 8, 4, 8, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+
+        // Title
+        ctx.fillStyle = 'rgba(255,230,150,0.9)';
+        ctx.font = 'bold 28px Sarabun, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🪷 ลอยกระทงออนไลน์', w / 2, 40);
+
+        const name = document.getElementById('userName').value.trim();
+        const wish = document.getElementById('userWish').value.trim();
+        if (name || wish) {
+          ctx.font = '16px Sarabun, sans-serif';
+          ctx.fillStyle = 'rgba(255,255,255,0.85)';
+          if (name) ctx.fillText(name, w / 2, h - 50);
+          if (wish) {
+            ctx.font = '14px Sarabun, sans-serif';
+            ctx.fillStyle = 'rgba(255,220,150,0.8)';
+            ctx.fillText('“' + wish + '”', w / 2, h - 28);
+          }
+        }
+
+        ctx.fillStyle = 'rgba(255,255,255,0.4)';
+        ctx.font = '12px Sarabun, sans-serif';
+        ctx.fillText('รักษ์โลก · ลอยกระทงออนไลน์', w / 2, h - 10);
+
+        resolve(canvas);
+      });
+    }
+
+    async function downloadImage() {
+      showToast('กำลังสร้างภาพ...');
+      const canvas = await captureScene();
+      const link = document.createElement('a');
+      link.download = `loy-krathong-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('บันทึกภาพเรียบร้อย 💾');
+    }
+
+    async function shareToFacebook() {
+      showToast('กำลังสร้างภาพ...');
+      const canvas = await captureScene();
+      const dataUrl = canvas.toDataURL('image/png');
+
+      // Try Web Share API first (best on mobile)
+      if (navigator.share && navigator.canShare) {
+        try {
+          const blob = await (await fetch(dataUrl)).blob();
+          const file = new File([blob], 'loy-krathong.png', { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'ลอยกระทงออนไลน์',
+              text: 'ขอขมาพระแม่คงคา และอธิษฐานขอพร 🪷 #ลอยกระทง #LoyKrathong'
+            });
+            showToast('แชร์เรียบร้อย ✨');
+            return;
+          }
+        } catch (e) {
+          // fallback
+        }
+      }
+
+      // Fallback: download + open Facebook
+      const link = document.createElement('a');
+      link.download = `loy-krathong-${Date.now()}.png`;
+      link.href = dataUrl;
+      link.click();
+
+      setTimeout(() => {
+        const text = encodeURIComponent('ขอขมาพระแม่คงคา และอธิษฐานขอพรในวันลอยกระทง 🪷 #ลอยกระทง #LoyKrathong #รักษ์โลก');
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}&quote=${text}`, '_blank', 'width=600,height=450');
+        showToast('บันทึกภาพแล้ว · อัปโหลดภาพไปที่ Facebook ได้เลย');
+      }, 400);
+    }
+
+    // ===================== UI HELPERS =====================
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    // ===================== EVENT LISTENERS =====================
+    document.getElementById('floatBtn').addEventListener('click', () => {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (soundEnabled && !ambientNodes.length) startAmbient();
+
+      const name = document.getElementById('userName').value.trim();
+      const wish = document.getElementById('userWish').value.trim();
+      const x = window.innerWidth / 2 - 36 + (Math.random() - 0.5) * 80;
+      const y = window.innerHeight * 0.52 + 30 + Math.random() * 25;
+      spawnKrathong(x, y, name, wish, true);
+    });
+
+    document.getElementById('water').addEventListener('click', (e) => {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (soundEnabled && !ambientNodes.length) startAmbient();
+
+      const name = document.getElementById('userName').value.trim();
+      const wish = document.getElementById('userWish').value.trim();
+      spawnKrathong(e.clientX - 36, e.clientY - 20, name, wish, true);
+    });
+
+    document.getElementById('soundBtn').addEventListener('click', toggleSound);
+    document.getElementById('shareBtn').addEventListener('click', shareToFacebook);
+    document.getElementById('downloadBtn').addEventListener('click', downloadImage);
+
+    // Style selector
+    document.querySelectorAll('.style-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedStyle = btn.dataset.style;
+      });
+    });
+
+    // Color selector
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedColor = btn.dataset.color;
+      });
+    });
+
+    // ===================== INIT =====================
+    createStars();
+    createFireflies();
+
+    // Ambient krathongs
+    for (let i = 0; i < 9; i++) {
+      setTimeout(() => {
+        spawnKrathong(
+          Math.random() * window.innerWidth,
+          window.innerHeight * 0.52 + 15 + Math.random() * window.innerHeight * 0.3
+        );
+      }, i * 350);
+    }
+
+    setInterval(() => {
+      if (activeKrathongs.length < 16) {
+        spawnKrathong(-60, window.innerHeight * 0.52 + 20 + Math.random() * window.innerHeight * 0.28);
+      }
+    }, 2200);
+
+    requestAnimationFrame(animate);
+
+    // Auto-start sound on first interaction
+    document.body.addEventListener('click', () => {
+      initAudio();
+      if (soundEnabled && !ambientNodes.length) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        startAmbient();
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
